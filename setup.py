@@ -66,7 +66,7 @@ def run_script(script: str):
 def remove_dirs():
     for directory in ["Documents" "Music" "Pictures" "Public" "Templates" "Videos" "linux-scripts"]:
         if os.path.exists(directory):
-            sudo(f"rm -rf {directory}")
+            sudo(f"rm -rf {directory}", yes=False)
             print(f"Removed {directory}")
     if not os.path.exists("proj"):
         os.mkdir("proj")
