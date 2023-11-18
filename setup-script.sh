@@ -1,5 +1,5 @@
 #!/bin/bash
-# sudo git clone https://github.com/Defmon3/linux-scripts && sudo mv linux-scripts/* . && sudo bash setup-script.sh
+# sudo mkdir temp && cd temp && sudo git clone https://github.com/Defmon3/linux-scripts && sudo mv linux-scripts/* . && sudo bash setup-script.sh
 
 
 set -euo pipefail  # Enable strict error handling
@@ -8,6 +8,7 @@ export DEBIAN_FRONTEND=noninteractive
 pip install requests
 
 sudo python3 setup.py
+sudo rm -r setup.py
 
 
 #echo "########################################## Removing files and directories ##############################################" > /dev/null 2>&1
@@ -46,6 +47,8 @@ sudo python3 setup.py
 
 # Run additional scripts
 bash wordlists.sh
+sudo rm-r wordlists.sh
+
 bash proton.sh
 bash xmind.sh
 bash fix_postgres.sh

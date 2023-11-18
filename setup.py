@@ -22,7 +22,6 @@ def message(text: str):
     print(f"{text:#^50}")
 
 
-
 def myprint(text):
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -101,12 +100,26 @@ def run_scripts():
         run_script(script)
         print(" ")"""
 
-"""def install_proton():
+
+def install_proton():
     filename = download(
         "https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3_all.deb")
     install(f"./{filename}")
     install("proton-vpn-gnome-desktop")
-"""
+    if os.path.exists(filename):
+        os.remove(filename)
+
+
+def install_wordlists():
+    if not os.path.exists("/usr/share/wordlists"):
+        os.mkdir("/usr/share/wordlists")
+    if not os.path.exists("/usr/share/wordlists/xsspayloads.txt"):
+        download("https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
+                 "xss-payload-list.txt")
+    if not os.path.exists("/usr/share/wordlists/sql-injection-payload-list.txt"):
+        if os.path.exists("/usr/share/wordlists/sql-injection-payload-list"):
+            os.remove("/usr/share/wordlists/sql-injection-payload-list")
+        sudo("git clone https://github.com/payloadbox/sql-injection-payload-list.git /usr/share/wordlists/sql-injection-payload-list", yes=False)
 
 
 def main():
