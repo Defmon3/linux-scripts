@@ -1,5 +1,6 @@
 import os
 import os.path
+import re
 
 import requests
 
@@ -83,24 +84,24 @@ def install_packages():
 
 @myprint("Update and Upgrade packages")
 def update_and_upgrade():
+    with open("console-setup", "w") as out_file:
+        out_file.write("""console-setup   console-setup/charmap47 select UTF-8
+console-setup   console-setup/fontface47 select Fixed
+console-setup   console-setup/fontsize-text47 select 16
+""")
+
     myprint("Updating and Upgrading")
+
     sudo("apt -q update")
+    sudo("debconf-set-selections < console-setup", yes=False)
     sudo("apt -q upgrade")
     myprint("End")
+    if os.path.exists("console-setup"):
+        os.remove("console-setup")
 
 
-"""
-@myprint("Running scripts")
-def run_scripts():
-    for script in ["wordlists.sh",
-                    "xminds.sh",
-                   "fix_postgres.sh",
-                   "burp_pro.sh"]:
-        message(f"Running script {script}")
-        run_script(script)
-        print(" ")"""
 
-
+@myprint("Installing protonvpn")
 def install_proton():
     filename = download(
         "https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3_all.deb")
@@ -109,7 +110,7 @@ def install_proton():
     if os.path.exists(filename):
         os.remove(filename)
 
-
+@myprint("Installing wordlists")
 def install_wordlists():
     if not os.path.exists("/usr/share/wordlists"):
         os.mkdir("/usr/share/wordlists")
@@ -119,7 +120,32 @@ def install_wordlists():
     if not os.path.exists("/usr/share/wordlists/sql-injection-payload-list.txt"):
         if os.path.exists("/usr/share/wordlists/sql-injection-payload-list"):
             os.remove("/usr/share/wordlists/sql-injection-payload-list")
-        sudo("git clone https://github.com/payloadbox/sql-injection-payload-list.git /usr/share/wordlists/sql-injection-payload-list", yes=False)
+        sudo(
+            "git clone https://github.com/payloadbox/sql-injection-payload-list.git /usr/share/wordlists/sql-injection-payload-list",
+            yes=False)
+
+@myprint("Installing xminds")
+def install_xminds():
+    install("snapd")
+    sudo("service snapd start", yes=False)
+    sudo("apt update")
+    sudo("snap install core", yes=False)
+    sudo("snap install xmind", yes=False)
+    if os.path.exists("/home/kali/.bashrc"):
+        with open("/home/kali/.bashrc", "rw") as file:
+            filedata = file.read()
+            if not filedata.find("export PATH=$PATH:/snap/bin") > 0:
+                filedata += "\nexport PATH=$PATH:/snap/bin"
+                file.write(filedata)
+
+@myprint("Fixing postgresql")
+def fix_postgres():
+    if os.path.exists("/etc/postgresql/16/main/postgresql.conf"):
+        with open("/etc/postgresql/16/main/postgresql.conf", "rw") as file:
+            filedata = file.read()
+            re.sub("port = 5433", "port = 5432", filedata)
+            file.write(filedata)
+            message("Changed postgresql.conf port to 5432")
 
 
 def main():
@@ -130,6 +156,10 @@ def main():
     install_packages()
     sudo('chsh -s "$(which zsh)"', yes=False)
 
+    install_wordlists()
+    install_proton()
+    install_xminds()
+    fix_postgres()
     message("Cleaning up")
     sudo("apt autoremove")
     os.system(f"bash -c 'unset DEBIAN_FRONTEND'")
