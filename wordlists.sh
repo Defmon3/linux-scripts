@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Install some wordlists
 sudo wget https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt -O /usr/share/wordlists/xsspayloads.txt
 

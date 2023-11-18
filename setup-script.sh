@@ -4,6 +4,16 @@
 
 # Initial upgrade
 sudo apt update && sudo apt upgrade -y
+pip install requests
+
+# remove directories
+rm -rf ~/Documents
+rm -rf ~/Music
+rm -rf ~/Pictures
+rm -rf ~/Public
+rm -rf ~/Templates
+rm -rf ~/Videos
+mkdir proj
 
 #install git
 sudo apt install git -y
@@ -21,5 +31,6 @@ fix_postgres.sh
 sudo apt install gvm
 
 burp_pro.sh
+sudo chsh -s $(which zsh)
 
 

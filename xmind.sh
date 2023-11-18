@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Install snapd
 sudo apt install snapd -y
 sudo service snapd start

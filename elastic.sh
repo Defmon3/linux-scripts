@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Elastic stack installation
 
 # 1. Install dependencies:

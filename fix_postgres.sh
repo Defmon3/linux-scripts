@@ -1,3 +1,4 @@
+#!/bin/bash
 
 
 # File path to the PostgreSQL configuration
