@@ -95,6 +95,7 @@ console-setup   console-setup/fontsize-text47 select 16
 
     sudo("apt -q update")
     sudo("debconf-set-selections < console-setup && sudo apt -q -y upgrade", yes=False)
+    os.system("bash -c 'sudo debconf-set-selections < console-setup &&  export DEBIAN_FRONTEND=noninteractive &&sudo apt -q -y upgrade'")
     myprint("End")
     if os.path.exists("console-setup"):
         os.remove("console-setup")
@@ -119,7 +120,7 @@ def install_wordlists():
                  "xss-payload-list.txt")
     if not os.path.exists("/usr/share/wordlists/sql-injection-payload-list.txt"):
         if os.path.exists("/usr/share/wordlists/sql-injection-payload-list"):
-            os.remove("/usr/share/wordlists/sql-injection-payload-list")
+            os.rmdir("/usr/share/wordlists/sql-injection-payload-list")
         sudo(
             "git clone https://github.com/payloadbox/sql-injection-payload-list.git /usr/share/wordlists/sql-injection-payload-list",
             yes=False)
