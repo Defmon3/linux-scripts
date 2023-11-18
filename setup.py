@@ -18,7 +18,9 @@ def download(url: str, filename: str = None) -> str:
 
 
 def message(text: str):
+    print(" ")
     print(f"{text:#^50}")
+    print(" ")
 
 
 def myprint(text):
@@ -115,7 +117,6 @@ def main():
 
     message("Cleaning up")
     sudo("apt autoremove")
-    sudo("unset DEBIAN_FRONTEND", yes=False)
     os.system(f"bash -c 'unset DEBIAN_FRONTEND'")
     # sudo("apt install gvm")
 
