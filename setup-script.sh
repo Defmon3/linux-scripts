@@ -26,14 +26,15 @@ print_section "Setting up directories"
 #!/bin/bash
 set -euo pipefail  # Enable strict error handling
 
+print_section "Removing files and directories"
 # Remove directories
 dirs_to_remove=("Documents" "Music" "Pictures" "Public" "Templates" "Videos" "linux-scripts")
 for dir in "${dirs_to_remove[@]}"; do
     echo "Removing $dir..."
-    rm -rf ~/"$dir"
+    rm -rf "$dir"
     echo "Removed $dir."
 done
-
+print_section "END Removing files and directories"
 
 # Create a "proj" directory
 if ! [ -d "proj" ]; then
