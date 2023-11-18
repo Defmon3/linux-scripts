@@ -40,7 +40,9 @@ for dir in "${dirs_to_remove[@]}"; do
 done
 
 # Create a "proj" directory
-mkdir -p "proj"
+if ! [ -d "proj" ]; then
+  mkdir -p "proj"
+fi
 echo ""
 
 # Install applications
