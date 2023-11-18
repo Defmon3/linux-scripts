@@ -49,7 +49,7 @@ bash wordlists.sh
 bash proton.sh
 bash xmind.sh
 bash fix_postgres.sh
-bash burp_pro.sh
+bash install_burp_pro.sh
 
 # Change the default shell to zsh
 
