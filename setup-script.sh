@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #chmod +x setup-script.sh
-: <<'END'
+
 # Initial upgrade
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y git vim curl terminator
@@ -12,8 +12,17 @@ sudo apt-get install ./protonvpn-stable-release_1.0.3_all.deb -y
 sudo apt-get update
 sudo apt-get install proton-vpn-gnome-desktop
 
-#install xmind
-# Install snapd
+#Install some wordlists
+sudo wget https://github.com/payloadbox/xss-payload-list/blob/master/Intruder/xss-payload-list.txt
+sudo mv xss-payload-list.txt /usr/share/wordlists/xss-payload-list.txt
+sudo git clone https://github.com/payloadbox/sql-injection-payload-list.git
+sudo mv sql-injection-payload-list /usr/share/wordlists/sql-injection-payload-list
+
+#Install netcat
+sudo apt install netcat-traditional
+
+#Install xmind
+#Install snapd
 sudo apt install snapd -y
 
 # Start snapd service
@@ -52,7 +61,7 @@ fi
 
 sudo systemctl restart postgresql
 sudo apt install terminator -y
-END
+
 
 sudo apt install gvm
 
