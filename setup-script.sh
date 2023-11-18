@@ -3,7 +3,11 @@
 #chmod +x setup-script.sh
 
 # Initial upgrade
-sudo apt update && sudo apt upgrade -y
+echo "############################## Running update and upgrade ##################################"
+sudo apt -q update && sudo apt -q upgrade -y
+echo "########################################## END ##############################################"
+echo ""
+
 pip install requests
 
 # remove directories
@@ -28,9 +32,11 @@ xmind.sh
 fix_postgres.sh
 
 
-sudo apt install gvm
+
 
 burp_pro.sh
 sudo chsh -s $(which zsh)
+sudo apt autoremove -y
+sudo apt install gvm
 
 
