@@ -44,6 +44,7 @@ def raw(command: str):
 
 def cmd(command: str):
     os.system(f"bash -c 'set -euo pipefail && set -x && {command}'")
+    os.system(f"bash -c 'set -euo pipefail && set -x && sudo debconf-set-selections < console-setup'")
 
 
 def sudo(command: str, yes: bool = True):
@@ -65,12 +66,13 @@ def run_script(script: str):
 @myprint("Removing and adding directories")
 def remove_dirs():
     for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
-        print(f"Exist {directory} == {os.path.exists(directory)}")
-        if os.path.exists(directory):
-            sudo(f"rm -rf {directory}", yes=False)
-            print(f"Removed {directory}")
+        dir_path = f"/home/kali/{directory}"
+        print(f"Exist {dir_path} == {os.path.exists(dir_path)}")
+        if os.path.exists(dir_path):
+            sudo(f"rm -rf {dir_path}", yes=False)
+            print(f"Removed {dir_path}")
     if not os.path.exists("proj"):
-        print(f"Exist proj == {os.path.exists(directory)}")
+        print(f"Exist proj == {os.path.exists(dir_path)}")
         os.mkdir("proj")
 
 
@@ -93,7 +95,7 @@ console-setup   console-setup/fontsize-text47 select 16
     myprint("Updating and Upgrading")
 
     sudo("apt -q update")
-    sudo("debconf-set-selections < console-setup", yes=False)
+    sudo("debconf-set-selections < console-setup && sudo apt -q upgrade", yes=False)
     sudo("apt -q upgrade")
     myprint("End")
     if os.path.exists("console-setup"):
