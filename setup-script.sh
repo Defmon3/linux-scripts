@@ -10,7 +10,7 @@ print_section() {
 # Main Script
 
 # Clone the Linux-scripts repository and move its contents to the current directory
-# git clone https://github.com/Defmon3/linux-scripts && mv linux-scripts/* .
+# sudo git clone https://github.com/Defmon3/linux-scripts && sudo mv linux-scripts/* . && sudo bash setup-script.sh
 
 # Make the setup-script.sh executable
 # chmod +x setup-script.sh
@@ -20,6 +20,24 @@ set -x
 
 # Set DEBIAN_FRONTEND to noninteractive to make apt assume "yes" for prompts
 export DEBIAN_FRONTEND=noninteractive
+
+print_section "Setting up directories"
+# Remove directories
+#!/bin/bash
+set -euo pipefail  # Enable strict error handling
+
+# Remove directories
+dirs_to_remove=("Documents" "Music" "Pictures" "Public" "Templates" "Videos" "linux-scripts")
+for dir in "${dirs_to_remove[@]}"; do
+    rm -rf ~/"$dir"
+done
+
+
+# Create a "proj" directory
+if ! [ -d "proj" ]; then
+  mkdir -p "proj"
+fi
+echo ""
 
 # Initial update and upgrade
 print_section "Running update and upgrade"
@@ -32,18 +50,7 @@ pip install requests
 echo ""
 
 # Setting up directories
-print_section "Setting up directories"
-# Remove directories
-dirs_to_remove=("Documents" "Music" "Pictures" "Public" "Templates" "Videos", "linux-scripts")
-for dir in "${dirs_to_remove[@]}"; do
-    rm -rf ~/"$dir"
-done
 
-# Create a "proj" directory
-if ! [ -d "proj" ]; then
-  mkdir -p "proj"
-fi
-echo ""
 
 # Install applications
 print_section "Installing apps"
@@ -54,7 +61,7 @@ done
 echo ""
 
 # Run additional scripts
-wordlists.sh
+./wordlists.sh
 proton.sh
 xmind.sh
 fix_postgres.sh
