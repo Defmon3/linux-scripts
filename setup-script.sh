@@ -29,7 +29,9 @@ set -euo pipefail  # Enable strict error handling
 # Remove directories
 dirs_to_remove=("Documents" "Music" "Pictures" "Public" "Templates" "Videos" "linux-scripts")
 for dir in "${dirs_to_remove[@]}"; do
+    echo "Removing $dir..."
     rm -rf ~/"$dir"
+    echo "Removed $dir."
 done
 
 
@@ -61,7 +63,7 @@ done
 echo ""
 
 # Run additional scripts
-./wordlists.sh
+bash wordlists.sh
 proton.sh
 xmind.sh
 fix_postgres.sh
