@@ -34,7 +34,7 @@ echo ""
 # Setting up directories
 print_section "Setting up directories"
 # Remove directories
-dirs_to_remove=("Documents" "Music" "Pictures" "Public" "Templates" "Videos")
+dirs_to_remove=("Documents" "Music" "Pictures" "Public" "Templates" "Videos", "linux-scripts")
 for dir in "${dirs_to_remove[@]}"; do
     rm -rf ~/"$dir"
 done
@@ -54,11 +54,11 @@ done
 echo ""
 
 # Run additional scripts
-./wordlists.sh
-./proton.sh
-./xmind.sh
-./fix_postgres.sh
-./burp_pro.sh
+wordlists.sh
+proton.sh
+xmind.sh
+fix_postgres.sh
+burp_pro.sh
 
 # Change the default shell to zsh
 print_section "Changing default shell to zsh"
