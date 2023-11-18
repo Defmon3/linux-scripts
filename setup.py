@@ -64,7 +64,7 @@ def run_script(script: str):
 
 @myprint("Removing and adding directories")
 def remove_dirs():
-    for directory in ["Documents" "Music" "Pictures" "Public" "Templates" "Videos" "linux-scripts"]:
+    for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
         print(f"Exist {directory} == {os.path.exists(directory)}")
         if os.path.exists(directory):
             sudo(f"rm -rf {directory}", yes=False)
