@@ -4,7 +4,7 @@ set -euo pipefail  # Enable strict error handling
 # Functions
 
 print_section() {
-    echo "########################################## $1 ##############################################"
+    echo "########################################## $1 ##############################################" > /dev/null 2>&1
 }
 
 # Main Script
@@ -29,11 +29,7 @@ set -euo pipefail  # Enable strict error handling
 print_section "Removing files and directories"
 # Remove directories
 dirs_to_remove=("Documents" "Music" "Pictures" "Public" "Templates" "Videos" "linux-scripts")
-for dir in "${dirs_to_remove[@]}"; do
-    echo "Removing $dir..."
-    rm -rf "$dir"
-    echo "Removed $dir."
-done
+ls
 print_section "END Removing files and directories"
 
 # Create a "proj" directory
