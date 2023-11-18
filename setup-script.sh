@@ -4,6 +4,7 @@ set -euo pipefail  # Enable strict error handling
 # Functions
 
 print_section() {
+    
     echo "########################################## $1 ##############################################" > /dev/null 2>&1
 }
 
@@ -15,21 +16,17 @@ print_section() {
 # Make the setup-script.sh executable
 # chmod +x setup-script.sh
 
-# Enable command tracing for debugging
-set -x
+
+set -x # Enable command tracing for debugging
 
 # Set DEBIAN_FRONTEND to noninteractive to make apt assume "yes" for prompts
 export DEBIAN_FRONTEND=noninteractive
 
-print_section "Setting up directories"
-# Remove directories
-#!/bin/bash
+
 set -euo pipefail  # Enable strict error handling
 
 print_section "Removing files and directories"
-# Remove directories
 dirs_to_remove=("Documents" "Music" "Pictures" "Public" "Templates" "Videos" "linux-scripts")
-ls
 print_section "END Removing files and directories"
 
 # Create a "proj" directory
@@ -37,6 +34,7 @@ if ! [ -d "proj" ]; then
   mkdir -p "proj"
 fi
 echo ""
+
 
 # Initial update and upgrade
 print_section "Running update and upgrade"
@@ -47,9 +45,7 @@ echo ""
 print_section "PIP Install"
 pip install requests
 echo ""
-
-# Setting up directories
-
+print_section "END PIP Install"
 
 # Install applications
 print_section "Installing apps"
