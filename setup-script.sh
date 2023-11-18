@@ -45,11 +45,11 @@ sudo python3 setup.py
 #echo ""
 
 # Run additional scripts
-#bash wordlists.sh
-#proton.sh
-#xmind.sh
-#fix_postgres.sh
-#burp_pro.sh
+bash wordlists.sh
+bash proton.sh
+bash xmind.sh
+bash fix_postgres.sh
+bash burp_pro.sh
 
 # Change the default shell to zsh
 

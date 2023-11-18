@@ -86,6 +86,7 @@ def update_and_upgrade():
     myprint("End")
 
 
+"""
 @myprint("Running scripts")
 def run_scripts():
     for script in ["wordlists.sh",
@@ -94,14 +95,14 @@ def run_scripts():
                    "burp_pro.sh"]:
         message(f"Running script {script}")
         run_script(script)
-        print(" ")
+        print(" ")"""
 
-
-def install_proton():
+"""def install_proton():
     filename = download(
         "https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3_all.deb")
     install(f"./{filename}")
     install("proton-vpn-gnome-desktop")
+"""
 
 
 def main():
@@ -111,8 +112,7 @@ def main():
     update_and_upgrade()
     install_packages()
     sudo('chsh -s "$(which zsh)"', yes=False)
-    install_proton()
-    run_scripts()
+
     message("Cleaning up")
     sudo("apt autoremove")
     sudo("unset DEBIAN_FRONTEND", yes=False)
