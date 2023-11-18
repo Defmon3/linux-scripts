@@ -1,5 +1,5 @@
 #!/bin/bash
-# sudo mkdir temp && cd temp && sudo git clone https://github.com/Defmon3/linux-scripts && sudo mv linux-scripts/* . && sudo bash setup.sh
+# sudo mkdir -p temp && cd temp && sudo git clone https://github.com/Defmon3/linux-scripts && sudo mv linux-scripts/* . && sudo bash setup.sh
 
 
 set -euo pipefail  # Enable strict error handling

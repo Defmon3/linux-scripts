@@ -95,7 +95,7 @@ console-setup   console-setup/fontsize-text47 select 16
     myprint("Updating and Upgrading")
 
     sudo("apt -q update")
-    sudo("debconf-set-selections < console-setup && sudo apt -q upgrade", yes=False)
+    sudo("debconf-set-selections < console-setup && sudo apt -q -y upgrade", yes=False)
     sudo("apt -q upgrade")
     myprint("End")
     if os.path.exists("console-setup"):
