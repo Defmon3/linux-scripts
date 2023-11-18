@@ -10,7 +10,7 @@ fi
 
 if ! [ -f "/usr/share/wordlists/sql-injection-payload-list.git" ]; then
   if ! [ -d "/usr/share/wordlists/sql-injection-payload-list" ]; then
-    sudo rm -rf /usr/share/wordlists/sql-injection-payload-list
+    sudo rm -r /usr/share/wordlists/sql-injection-payload-list
 
   fi
   sudo git clone https://github.com/payloadbox/sql-injection-payload-list.git /usr/share/wordlists/sql-injection-payload-list
