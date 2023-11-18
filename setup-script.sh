@@ -53,3 +53,13 @@ fi
 sudo systemctl restart postgresql
 sudo apt install terminator -y
 END
+
+sudo apt install gvm
+
+
+sudo wget https://github.com/payloadbox/xss-payload-list/blob/master/Intruder/xss-payload-list.txt
+sudo mv xss-payload-list.txt /usr/share/wordlists/xss-payload-list.txt
+
+sudo git clone https://github.com/payloadbox/sql-injection-payload-list.git
+sudo mv sql-injection-payload-list /usr/share/wordlists/sql-injection-payload-list
+
