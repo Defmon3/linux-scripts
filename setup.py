@@ -44,7 +44,6 @@ def raw(command: str):
 
 def cmd(command: str):
     os.system(f"bash -c 'set -euo pipefail && set -x && {command}'")
-    os.system(f"bash -c 'set -euo pipefail && set -x && sudo debconf-set-selections < console-setup'")
 
 
 def sudo(command: str, yes: bool = True):
@@ -96,7 +95,6 @@ console-setup   console-setup/fontsize-text47 select 16
 
     sudo("apt -q update")
     sudo("debconf-set-selections < console-setup && sudo apt -q -y upgrade", yes=False)
-    sudo("apt -q upgrade")
     myprint("End")
     if os.path.exists("console-setup"):
         os.remove("console-setup")
@@ -134,10 +132,12 @@ def install_xminds():
     sudo("snap install core", yes=False)
     sudo("snap install xmind", yes=False)
     if os.path.exists("/home/kali/.bashrc"):
-        with open("/home/kali/.bashrc", "rw") as file:
+        with open("/home/kali/.bashrc", "r") as file:
             filedata = file.read()
-            if not filedata.find("export PATH=$PATH:/snap/bin") > 0:
-                filedata += "\nexport PATH=$PATH:/snap/bin"
+
+        if not filedata.find("export PATH=$PATH:/snap/bin") > 0:
+            filedata += "\nexport PATH=$PATH:/snap/bin"
+            with open("home/kali/.bashrc", "w") as file:
                 file.write(filedata)
 
 @myprint("Fixing postgresql")
@@ -145,6 +145,7 @@ def fix_postgres():
     if os.path.exists("/etc/postgresql/16/main/postgresql.conf"):
         with open("/etc/postgresql/16/main/postgresql.conf", "rw") as file:
             filedata = file.read()
+        with open("/etc/postgresql/16/main/postgresql.conf", "w") as file:
             re.sub("port = 5433", "port = 5432", filedata)
             file.write(filedata)
             message("Changed postgresql.conf port to 5432")

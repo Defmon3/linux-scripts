@@ -1,5 +1,5 @@
 #!/bin/bash
-# sudo mkdir -p temp && cd temp && sudo git clone https://github.com/Defmon3/linux-scripts && sudo mv linux-scripts/* . && sudo bash setup.sh
+# sudo rm -r -f home/kali/temp && sudo mkdir -p home/kali/temp && cd home/kali/temp && sudo git clone https://github.com/Defmon3/linux-scripts && sudo mv linux-scripts/* . && sudo bash setup.sh
 
 
 set -euo pipefail  # Enable strict error handling
