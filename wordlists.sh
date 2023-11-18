@@ -9,7 +9,7 @@ if ! [ -f "/usr/share/wordlists/xsspayloads.txt" ]; then
 fi
 
 if ! [ -f "/usr/share/wordlists/sql-injection-payload-list.git" ]; then
-  if ! [ -d "/usr/share/wordlists/sql-injection-payload-list" ]; then
+  if [ -d "/usr/share/wordlists/sql-injection-payload-list" ]; then
     sudo rm -r /usr/share/wordlists/sql-injection-payload-list
 
   fi
