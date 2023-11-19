@@ -95,7 +95,7 @@ console-setup   console-setup/fontsize-text47 select 16
 
     sudo("apt -q update")
     sudo("debconf-set-selections < /etc/console-setup && sudo apt -q -y upgrade", yes=False)
-    os.system("bash -c 'sudo debconf-set-selections < console-setup &&  export DEBIAN_FRONTEND=noninteractive &&sudo apt -q -y upgrade'")
+    os.system("bash -c 'sudo debconf-set-selections < etc/console-setup &&sudo apt -q -y upgrade'")
     myprint("End")
     if os.path.exists("console-setup"):
         os.remove("console-setup")
