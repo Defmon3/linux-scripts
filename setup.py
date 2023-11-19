@@ -181,9 +181,11 @@ def main():
     except Exception as e:
         print(f"Exception {e}")
     finally:
-        message("Cleaning up")
-        cmd("sudo apt autoremove -y")
-        cmd("/home/kali")
+        try:
+            message("Cleaning up")
+            cmd("sudo apt autoremove -y")
+        finally:
+            cmd("cd /home/kali")
 
 
 if __name__ == '__main__':
