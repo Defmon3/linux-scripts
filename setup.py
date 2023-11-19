@@ -128,7 +128,7 @@ def install_wordlists():
             "https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
             "xss-payload-list.txt")
 
-        shutil.move(wordlist_dir, (wordlist_dir / filename.name))
+        shutil.move((wordlist_dir / filename.name), wordlist_dir)
         cmd(f"sudo chmod 777 {filename.resolve()}")
     inject_file_path = Path(wordlist_dir / "sql-injection-payload-list.txt")
     if not inject_file_path.exists():
