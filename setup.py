@@ -50,12 +50,16 @@ def myprint(text):
     return decorator
 
 
-def cmd(command: str, user: str = None):
+def cmd(command: str, grep: str = None):
+    if grep is not None:
+        command = f"{command} | grep {grep}"
     subprocess.run(f"{command}", shell=True, check=True, text=True)
 
 
-def user_cmd(command: str):
+def user_cmd(command: str, grep: str = None):
     user = get_original_user_home().name
+    if grep is not None:
+        command = f"{command} | grep {grep}"
     cmd(f"sudo -u {user} {command}")
 
 
@@ -92,7 +96,7 @@ def update_and_upgrade_packages():
     myprint("Updating")
     cmd("sudo apt update -q ")
     myprint("Updating")
-    cmd("sudo apt upgrade -y ")
+    cmd("sudo apt upgrade -y ", grep=" -vE (Installing|Setting up|Preparing|Unpacking|Reading database)")
     myprint("End")
 
 
@@ -111,10 +115,12 @@ def install_proton():
 @myprint("Installing wordlists")
 def install_wordlists():
     wordlist_dir = Path("/usr/share/wordlists")
-    #wordlist_dir.mkdir(exist_ok=True)
+    # wordlist_dir.mkdir(exist_ok=True)
     user_cmd(f"mkdir -p {wordlist_dir}")
     if not (wordlist_dir / "xsspayloads.txt").exists():
-        filename = download("https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt", "xss-payload-list.txt")
+        filename = download(
+            "https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
+            "xss-payload-list.txt")
         shutil.move(wordlist_dir, (wordlist_dir / filename.name))
         cmd(f"sudo chmod 777 {filename.resolve()}")
     inject_file_path = wordlist_dir / "sql-injection-payload-list.txt"
@@ -122,6 +128,7 @@ def install_wordlists():
         cmd("sudo git clone https://github.com/payloadbox/sql-injection-payload-list.git")
         shutil.move(inject_file_path.name, (wordlist_dir / inject_file_path.name))
         cmd(f"sudo chmod 777 {str(wordlist_dir / inject_file_path.name)}")
+
 
 # Step 7: Install xminds
 @myprint("Installing xminds")
