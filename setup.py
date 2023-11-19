@@ -111,7 +111,7 @@ def install_proton():
     filename = download(
         "https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3_all.deb")
     cmd(f"sudo apt install ./{filename.name} -y --allow-downgrades")
-    cmd("sudo apt-get install proton-vpn-gnome-desktop -y")
+    cmd("sudo apt-get install proton-vpn-gnome-desktop -y --allow-downgrades")
     if filename.exists():
         filename.unlink()
 
@@ -183,8 +183,9 @@ def main():
         try:
             message("Cleaning up")
             cmd("sudo apt autoremove -y")
-        finally:
-            cmd("cd /home/kali")
+        except:
+            pass
+    cmd("cd /home/kali")
 
 
 if __name__ == '__main__':
