@@ -146,7 +146,6 @@ def fix_postgres():
 def main():
     try:
         myprint("Starting setup script")
-        cmd("sudo export DEBIAN_FRONTEND=noninteractive")
         cmd('sudo chsh -s "$(which zsh)"')  # Step 4
 
         setup_directories()  # Step 1
