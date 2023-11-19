@@ -162,7 +162,6 @@ def main():
     try:
         myprint("Starting setup script")
         cmd('sudo chsh -s "$(which zsh)"')  # Step 4
-
         setup_directories()  # Step 1
         update_and_upgrade_packages()  # Step 2
         install_packages()  # Step 3
