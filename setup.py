@@ -128,7 +128,7 @@ def install_wordlists():
 
         shutil.move(filename.name, (wordlist_dir / filename.name))
         #cmd(f"sudo chmod 777 {filename.resolve()}")
-    inject_file_path = Path(wordlist_dir / "sql-injection-payload-list.txt")
+    inject_file_path = Path(wordlist_dir / "sql-injection-payload-list")
     if not inject_file_path.exists():
         cmd("sudo git clone https://github.com/payloadbox/sql-injection-payload-list.git")
         shutil.move(inject_file_path.name, (wordlist_dir / inject_file_path.name))
