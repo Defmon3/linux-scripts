@@ -65,7 +65,7 @@ def run_script(script: str):
 @myprint("Removing and adding directories")
 def remove_dirs():
     for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
-        dir_path = f"~/home/kali/{directory}"
+        dir_path = f"/home/kali/{directory}"
         print(f"Exist {dir_path} == {os.path.exists(dir_path)}")
         if os.path.exists(dir_path):
             sudo(f"rm -rf {dir_path}", yes=False)
@@ -94,8 +94,7 @@ console-setup   console-setup/fontsize-text47 select 16
     myprint("Updating and Upgrading")
 
     sudo("apt -q update")
-    sudo("debconf-set-selections < /etc/console-setup && sudo apt -q -y upgrade", yes=False)
-    os.system("bash -c 'sudo debconf-set-selections < etc/console-setup &&sudo apt -q -y upgrade'")
+    os.system("bash -c 'sudo debconf-set-selections < /etc/console-setup &&sudo apt -q -y upgrade'")
     myprint("End")
     if os.path.exists("console-setup"):
         os.remove("console-setup")
@@ -138,7 +137,7 @@ def install_xminds():
 
         if not filedata.find("export PATH=$PATH:/snap/bin") > 0:
             filedata += "\nexport PATH=$PATH:/snap/bin"
-            with open("home/kali/.bashrc", "w") as file:
+            with open("/home/kali/.bashrc", "w") as file:
                 file.write(filedata)
 
 @myprint("Fixing postgresql")
