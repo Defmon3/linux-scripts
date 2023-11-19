@@ -72,7 +72,7 @@ def setup_directories():
 
     (home_dir / "temp").mkdir(exist_ok=True)
 
-    user_cmd(str((home_dir / "proj").resolve()))
+    user_cmd("mkdir -p /home/kali/temp")
 
     os.chdir(Path.home() / "temp")
 
