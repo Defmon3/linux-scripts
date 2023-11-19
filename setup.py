@@ -66,13 +66,13 @@ def setup_directories():
     Remove directories that are not needed and add a temp directory
     :return:
     """
-    home_dir = Path.home()
+    home_dir = get_original_user_home()
     for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
         shutil.rmtree(home_dir / directory, ignore_errors=True)
 
     (home_dir / "temp").mkdir(exist_ok=True)
 
-    user_cmd(str((home_dir / "proj").absolute()))
+    user_cmd(str((home_dir / "proj").resolve()))
 
     os.chdir(Path.home() / "temp")
 
@@ -171,7 +171,6 @@ def main():
     finally:
         message("Cleaning up")
         cmd("sudo apt autoremove")
-        cmd("sudo unset DEBIAN_FRONTEND")
         cmd("/home/kali")
 
 
