@@ -66,7 +66,7 @@ def setup_directories():
     Remove directories that are not needed and add a temp directory
     :return:
     """
-    home_dir = get_original_user_home()
+    home_dir = Path("/home/kali")
     for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
         shutil.rmtree(home_dir / directory, ignore_errors=True)
 
