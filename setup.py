@@ -90,7 +90,7 @@ def install_packages():
 @myprint("Update and Upgrade packages")
 def update_and_upgrade_packages():
     myprint("Updating")
-    subprocess.run("sudo apt -q update")
+    subprocess.run("sudo apt update -q ")
     myprint("Updating")
     subprocess.run("sudo apt -q -y upgrade'")
     myprint("End")
