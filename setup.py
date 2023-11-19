@@ -96,7 +96,7 @@ def update_and_upgrade_packages():
     myprint("Updating")
     cmd("sudo apt update -q ")
     myprint("Updating")
-    cmd("sudo apt upgrade -y ", grep=" -vE (Installing|Setting up|Preparing|Unpacking|Reading database)")
+    cmd("sudo apt upgrade -y ", grep=" -vE '(Installing|Setting up|Preparing|Unpacking|Reading database)'")
     myprint("End")
 
 
