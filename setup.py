@@ -50,10 +50,11 @@ def myprint(text):
     return decorator
 
 
-def cmd(command: str, grep: str = None):
+def cmd(command: str, grep: str = None, stdout=None, stderr=None):
+    env = {"DEBIAN_FRONTEND": "noninteractive"}
     if grep is not None:
         command = f"{command} | grep {grep}"
-    subprocess.run(f"{command}", shell=True, check=True, text=True)
+    subprocess.run(f"{command}", shell=True, check=True, text=True, stdout=stdout, stderr=stderr, env=env)
 
 
 def user_cmd(command: str, grep: str = None):
@@ -96,7 +97,7 @@ def update_and_upgrade_packages():
     myprint("Updating")
     cmd("sudo apt update -q ")
     myprint("Updating")
-    cmd("sudo apt upgrade -y ", grep=" -vE '(Installing|Setting up|Preparing|Unpacking|Reading database|Get:)'")
+    cmd("sudo apt upgrade -y ", grep=" -vE '(Installing|Setting up|Preparing|Unpacking|Reading database|Get:)'", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     myprint("End")
 
 
