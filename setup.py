@@ -22,7 +22,8 @@ def get_original_user_home() -> Path:
 def download(url: str, filename: str | Path = None) -> Path:
     if filename is None:
         filename = Path(url).name
-
+    if isinstance(filename, str):
+        filename = Path(filename)
     if not filename.exists():
         print(f"Downloading {url} to {filename}")
         get_response = requests.get(url)
@@ -120,11 +121,12 @@ def install_proton():
 def install_wordlists():
     wordlist_dir = Path("/usr/share/wordlists")
     wordlist_dir.mkdir(exist_ok=True)
-
+    print(1)
     if not Path(wordlist_dir / "xsspayloads.txt").exists():
         filename = download(
             "https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
             "xss-payload-list.txt")
+        print(2)
         shutil.move(wordlist_dir, (wordlist_dir / filename.name))
         cmd(f"sudo chmod 777 {filename.resolve()}")
     inject_file_path = Path(wordlist_dir / "sql-injection-payload-list.txt")
