@@ -65,7 +65,7 @@ def run_script(script: str):
 @myprint("Removing and adding directories")
 def remove_dirs():
     for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
-        dir_path = f"/home/kali/{directory}"
+        dir_path = f"~/home/kali/{directory}"
         print(f"Exist {dir_path} == {os.path.exists(dir_path)}")
         if os.path.exists(dir_path):
             sudo(f"rm -rf {dir_path}", yes=False)
