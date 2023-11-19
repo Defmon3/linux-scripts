@@ -120,14 +120,16 @@ def install_proton():
 def install_wordlists():
     wordlist_dir = Path("/usr/share/wordlists")
     wordlist_dir.mkdir(exist_ok=True)
-
-    if not (wordlist_dir / "xsspayloads.txt").exists():
+    xsspath = wordlist_dir / "xsspayloads.txt"
+    print(f"Checking if {xsspath} exists")
+    if not xsspath.exists():
         filename = download(
             "https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
             "xss-payload-list.txt")
         shutil.move(wordlist_dir, (wordlist_dir / filename.name))
         cmd(f"sudo chmod 777 {filename.resolve()}")
     inject_file_path = wordlist_dir / "sql-injection-payload-list.txt"
+    print(f"Checking if {inject_file_path} exists")
     if not inject_file_path.exists():
         cmd("sudo git clone https://github.com/payloadbox/sql-injection-payload-list.git")
         shutil.move(inject_file_path.name, (wordlist_dir / inject_file_path.name))
