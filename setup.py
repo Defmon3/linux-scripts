@@ -120,9 +120,8 @@ def install_proton():
 def install_wordlists():
     wordlist_dir = Path("/usr/share/wordlists")
     wordlist_dir.mkdir(exist_ok=True)
-    xsspath = wordlist_dir / "xsspayloads.txt"
-    print(f"Checking if {xsspath} exists")
-    if not xsspath.exists():
+
+    if not Path(wordlist_dir / "xsspayloads.txt").exists():
         filename = download(
             "https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
             "xss-payload-list.txt")
