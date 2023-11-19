@@ -171,11 +171,11 @@ def main():
         setup_directories()  # Step 1
         #update_and_upgrade_packages()  # Step 2
         cmd("sudo apt update -y")
-        #install_packages()  # Step 3
-        #install_wordlists()  # step 5
-        #install_proton()  # step 6
-        #install_xminds()  # step 7
-        #fix_postgres()  # step 8
+        install_packages()  # Step 3
+        install_wordlists()  # step 5
+        install_proton()  # step 6
+        install_xminds()  # step 7
+        fix_postgres()  # step 8
         BurpInstaller().install_burp()  # step 9
         update_and_upgrade_packages()
         cmd('sudo chsh -s "$(which zsh)"')
