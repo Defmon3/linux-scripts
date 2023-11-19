@@ -110,7 +110,7 @@ def update_and_upgrade_packages():
 def install_proton():
     filename = download(
         "https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3_all.deb")
-    cmd(f"sudo apt install ./{filename.name} -y")
+    cmd(f"sudo apt install ./{filename.name} -y --allow-downgrades")
     cmd("sudo apt-get install proton-vpn-gnome-desktop -y")
     if filename.exists():
         filename.unlink()
