@@ -74,11 +74,13 @@ def setup_directories():
     for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
         shutil.rmtree(home_dir / directory, ignore_errors=True)
 
+    user_cmd("mkdir -p /home/kali/proj")
+    
     (home_dir / "temp").mkdir(exist_ok=True)
 
-    user_cmd("mkdir -p /home/kali/temp")
 
-    os.chdir(Path.home() / "temp")
+
+    os.chdir(home_dir / "temp")
 
 
 # Step 3: Install packages
