@@ -50,8 +50,13 @@ def myprint(text):
     return decorator
 
 
-def cmd(command: str):
-    subprocess.run(f"{command}, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True")
+def cmd(command: str, user: str = None):
+    subprocess.run(f"{command}", shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+
+def user_cmd(command: str):
+    user = get_original_user_home().name
+    cmd(f"sudo -u {user} {command}")
 
 
 # Step 1: Setting up directories
@@ -65,8 +70,10 @@ def setup_directories():
     for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
         shutil.rmtree(home_dir / directory, ignore_errors=True)
 
-    (home_dir / "proj").mkdir(exist_ok=True)
     (home_dir / "temp").mkdir(exist_ok=True)
+
+    user_cmd(str((home_dir / "proj").absolute()))
+
     os.chdir(Path.home() / "temp")
 
 
@@ -104,16 +111,17 @@ def install_proton():
 @myprint("Installing wordlists")
 def install_wordlists():
     wordlist_dir = Path("/usr/share/wordlists")
-    wordlist_dir.mkdir(exist_ok=True)
+    #wordlist_dir.mkdir(exist_ok=True)
+    user_cmd(f"mkdir -p {wordlist_dir}")
     if not (wordlist_dir / "xsspayloads.txt").exists():
-        download("https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
-                 "xss-payload-list.txt")
-
+        filename = download("https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt", "xss-payload-list.txt")
+        shutil.move(wordlist_dir, (wordlist_dir / filename.name))
+        cmd(f"sudo chmod 777 {filename.resolve()}")
     inject_file_path = wordlist_dir / "sql-injection-payload-list.txt"
     if not inject_file_path.exists():
         cmd("sudo git clone https://github.com/payloadbox/sql-injection-payload-list.git")
         shutil.move(inject_file_path.name, (wordlist_dir / inject_file_path.name))
-
+        cmd(f"sudo chmod 777 {str(wordlist_dir / inject_file_path.name)}")
 
 # Step 7: Install xminds
 @myprint("Installing xminds")
@@ -146,7 +154,7 @@ def fix_postgres():
 def main():
     try:
         myprint("Starting setup script")
-        cmd('sudo chsh -s "$(which zsh)"')  # Step 4
+        cmd('sudo bash chsh -s "$(which zsh)"')  # Step 4
 
         setup_directories()  # Step 1
         update_and_upgrade_packages()  # Step 2
