@@ -164,13 +164,6 @@ def fix_postgres():
         message("Changed postgresql.conf port to 5432")
 
 
-def delete_self():
-    command = "sleep 5; sudo rm -f /home/kali/temp"
-    log.debug("Tryign to delete self")
-
-    subprocess.Popen(command, shell=True)
-
-
 def main():
     try:
         myprint("Starting setup script")
@@ -192,10 +185,9 @@ def main():
         try:
             message("Cleaning up")
             cmd("sudo apt autoremove -y")
-            os.chdir("/home/kali")
-            cmd("cd /home/kali")
+
             log.debug("Done cleaning up")
-            delete_self()
+
 
         except:
             pass
