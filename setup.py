@@ -152,21 +152,24 @@ def fix_postgres():
 
 
 def main():
-    myprint("Starting setup script")
+    try:
+        myprint("Starting setup script")
 
-    remove_dirs()
-    update_and_upgrade()
-    install_packages()
-    sudo('chsh -s "$(which zsh)"', yes=False)
+        remove_dirs()
+        update_and_upgrade()
+        install_packages()
+        sudo('chsh -s "$(which zsh)"', yes=False)
 
-    install_wordlists()
-    install_proton()
-    install_xminds()
-    fix_postgres()
-    message("Cleaning up")
-    sudo("apt autoremove")
-    os.system(f"bash -c 'unset DEBIAN_FRONTEND'")
-    # sudo("apt install gvm")
+        install_wordlists()
+        install_proton()
+        install_xminds()
+        fix_postgres()
+        message("Cleaning up")
+        sudo("apt autoremove")
+        os.system(f"bash -c 'unset DEBIAN_FRONTEND'")
+        # sudo("apt install gvm")
+    finally:
+        cmd("cd ..")
 
 
 if __name__ == '__main__':
