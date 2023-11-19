@@ -98,7 +98,6 @@ class JdkInstaller:
         self.jdk_url = "https://download.oracle.com/java/18/archive/jdk-18.0.2.1_linux-x64_bin.deb"
         self.jdk_file = "oracle-jdk-18-linux-x64.deb"
 
-
     def install_jdk(self):
         print("")
         text = " JDK install starting "
@@ -112,7 +111,6 @@ class JdkInstaller:
 
 
 class BurpInstaller:
-
 
     def __init__(self):
         self.cheanup_for_testing()
@@ -131,17 +129,12 @@ class BurpInstaller:
         shutil.rmtree(Path("/opt/java"), ignore_errors=True)
         shutil.rmtree(Path("/opt/BurpSuitePro"), ignore_errors=True)
 
-    def install_jdk(self):
-        pass
-
     def mk_BhurpSuthPhro(self) -> Path:
         BhurpSuthPhro = Path("/opt/BurpSuitePro/BhurpSuthPhro")  # noqa
         BhurpSuthPhro.touch()
-        BhurpSuthPhro.write_text("""#!/bin/sh
+        BhurpSuthPhro.write_text('''#!/bin/sh
     
-        "/opt/BurpSuitePro/jre/bin/java" "--add-opens=java.desktop/javax.swing=ALL-UNNAMED" "--add-opens=java.base/java.lang=ALL-UNNAMED" "--add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED" "--add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED" "--add-opens=java.base/jdk.internal.org.objectweb.asm.Opcodes=ALL-UNNAMED" `"-javaagent:/opt/BurpSuitePro/Dr-FarFar.jar"` "-noverify" "-jar" "/opt/BurpSuitePro/burpsuite_pro.jar"
-    
-        _Note: Updte -javaagent:Dr-FarFar.jar path_""")
+        /usr/lib/jvm/jdk-18/bin/java --add-opens=java.desktop/javax.swing=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED --add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED --add-opens=java.base/jdk.internal.org.objectweb.asm.Opcodes=ALL-UNNAMED -javaagent:/opt/BurpSuitePro/Dr-FarFar.jar -noverify -jar /opt/BurpSuitePro/burpsuite_pro.jar''')
         return BhurpSuthPhro
 
     def move(self, src: Path, dest: Path):
@@ -154,7 +147,7 @@ class BurpInstaller:
 
         self.download_files()
 
-        java_binary = JavaInstaller().install_java()
+        # java_binary = JavaInstaller().install_java()
         JdkInstaller().install_jdk()
         # setup paths
 
@@ -183,11 +176,11 @@ class BurpInstaller:
             7. 'Next'
             Finish
             """)
+
             os.chdir("/opt/BurpSuitePro")
-            cmd(f"sudo {java_binary} -jar /opt/BurpSuitePro/Dr-FarFar.jar &")
+            cmd(f"sudo /usr/lib/jvm/jdk-18/bin/java -jar /opt/BurpSuitePro/Dr-FarFar.jar &")
             bsp_file = self.mk_BhurpSuthPhro()
             cmd(f"sudo chmod +777 {bsp_file.resolve()}")
-
 
     def download_files(self):
         download(

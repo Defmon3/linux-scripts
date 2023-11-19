@@ -169,7 +169,8 @@ def main():
         myprint("Starting setup script")
 
         setup_directories()  # Step 1
-        update_and_upgrade_packages()  # Step 2
+        #update_and_upgrade_packages()  # Step 2
+        cmd("sudo apt update -y")
         install_packages()  # Step 3
         install_wordlists()  # step 5
         install_proton()  # step 6
