@@ -51,7 +51,7 @@ def myprint(text):
 
 
 def cmd(command: str, user: str = None):
-    subprocess.run(f"{command}", shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    subprocess.run(f"{command}", shell=True, check=True, text=True)
 
 
 def user_cmd(command: str):
