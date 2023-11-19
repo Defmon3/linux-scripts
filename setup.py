@@ -5,10 +5,11 @@ import subprocess
 from pathlib import Path
 
 import requests
+from loguru import logger as log
 
 import inst_py_pack
 from install_burp import BurpInstaller
-from loguru import logger as log
+
 a = inst_py_pack
 
 
@@ -162,15 +163,13 @@ def fix_postgres():
         cfg_file.write_text(data)
         message("Changed postgresql.conf port to 5432")
 
+
 def delete_self():
-    # Path to the current script
-
-
-    # Command to wait for a few seconds and then delete the script
     command = "sleep 5; sudo rm -f /home/kali/temp"
+    log.debug("Tryign to delete self")
 
-    # Run the command in the background
     subprocess.Popen(command, shell=True)
+
 
 def main():
     try:
