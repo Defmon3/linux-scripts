@@ -51,11 +51,11 @@ def myprint(text):
     return decorator
 
 
-def cmd(command: str, grep: str = None, stdout=None, stderr=None):
+def cmd(command: str, grep: str = None, **kwargs):
     env = {"DEBIAN_FRONTEND": "noninteractive"}
     if grep is not None:
         command = f"{command} | grep {grep}"
-    subprocess.run(f"{command}", shell=True, check=True, text=True, stdout=stdout, stderr=stderr, env=env)
+    subprocess.run(f"{command}", shell=True, check=True, text=True, env=env, **kwargs)
 
 
 def user_cmd(command: str, grep: str = None):
@@ -100,7 +100,7 @@ def update_and_upgrade_packages():
     myprint("Updating")
     cmd("sudo apt update -q ")
     myprint("Updating")
-    #cmd("sudo apt upgrade -y ", grep=" -vE '(Installing|Setting up|Preparing|Unpacking|Reading database|Get:)'", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # cmd("sudo apt upgrade -y ", grep=" -vE '(Installing|Setting up|Preparing|Unpacking|Reading database|Get:)'", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     cmd("sudo apt upgrade -y ")
     myprint("End")
 
@@ -127,12 +127,12 @@ def install_wordlists():
             "xss-payload-list.txt")
 
         shutil.move(filename.name, (wordlist_dir / filename.name))
-        #cmd(f"sudo chmod 777 {filename.resolve()}")
+        # cmd(f"sudo chmod 777 {filename.resolve()}")
     inject_file_path = Path(wordlist_dir / "sql-injection-payload-list")
     if not inject_file_path.exists():
         cmd("sudo git clone https://github.com/payloadbox/sql-injection-payload-list.git")
         shutil.move(inject_file_path.name, (wordlist_dir / inject_file_path.name))
-        #cmd(f"sudo chmod 777 {str(wordlist_dir / inject_file_path.name)}")
+        # cmd(f"sudo chmod 777 {str(wordlist_dir / inject_file_path.name)}")
 
 
 # Step 7: Install xminds
@@ -166,7 +166,7 @@ def fix_postgres():
 def main():
     try:
         myprint("Starting setup script")
-        cmd('sudo chsh -s "$(which zsh)"')  # Step 4
+
         setup_directories()  # Step 1
         update_and_upgrade_packages()  # Step 2
         install_packages()  # Step 3
@@ -175,7 +175,8 @@ def main():
         install_xminds()  # step 7
         fix_postgres()  # step 8
         BurpInstaller().install_burp()  # step 9
-
+        update_and_upgrade_packages()
+        cmd('sudo chsh -s "$(which zsh)"')
         # sudo("apt install gvm")
     except Exception as e:
         print(f"Exception {e}")
@@ -185,6 +186,7 @@ def main():
             cmd("sudo apt autoremove -y")
         except:
             pass
+    # Step
     cmd("cd /home/kali")
 
 
