@@ -162,6 +162,15 @@ def fix_postgres():
         cfg_file.write_text(data)
         message("Changed postgresql.conf port to 5432")
 
+def delete_self():
+    # Path to the current script
+
+
+    # Command to wait for a few seconds and then delete the script
+    command = "sleep 5; sudo rm -f /home/kali/temp"
+
+    # Run the command in the background
+    subprocess.Popen(command, shell=True)
 
 def main():
     try:
@@ -187,8 +196,8 @@ def main():
         except:
             pass
     # Step
-    cmd("cd /home/kali")
-
+    os.chdir("/home/kali")
+    delete_self()
 
 if __name__ == '__main__':
     main()
