@@ -8,7 +8,7 @@ import requests
 
 import inst_py_pack
 from install_burp import BurpInstaller
-
+from loguru import logger as log
 a = inst_py_pack
 
 
@@ -32,8 +32,8 @@ def download(url: str, filename: str | Path = None) -> Path:
 
 
 def message(text: str):
-    print(" ")
-    print(f"{text:#^50}")
+    log.debug(" ")
+    log.debug(f"{text:#^50}")
 
 
 def myprint(text):
@@ -193,11 +193,15 @@ def main():
         try:
             message("Cleaning up")
             cmd("sudo apt autoremove -y")
+            os.chdir("/home/kali")
+            cmd("cd /home/kali")
+            log.debug("Done cleaning up")
+            delete_self()
+
         except:
             pass
     # Step
-    os.chdir("/home/kali")
-    delete_self()
+
 
 if __name__ == '__main__':
     main()

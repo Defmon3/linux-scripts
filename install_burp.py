@@ -115,7 +115,6 @@ class BurpInstaller:
 
 
     def __init__(self):
-        self.cheanup_for_testing()
         self.cwd = get_original_user_home() / "temp"
         self.cwd.mkdir(parents=True, exist_ok=True)
         os.chdir(self.cwd)
@@ -183,10 +182,11 @@ class BurpInstaller:
             7. 'Next'
             Finish
             """)
-
-            cmd(f"sudo {java_binary} -jar /opt/BurpSuitePro/Dr-FarFar.jar")
+            os.chdir("/opt/BurpSuitePro")
+            cmd(f"sudo {java_binary} -jar /opt/BurpSuitePro/Dr-FarFar.jar &")
             bsp_file = self.mk_BhurpSuthPhro()
             cmd(f"sudo chmod +777 {bsp_file.resolve()}")
+
 
     def download_files(self):
         download(
