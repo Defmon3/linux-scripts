@@ -1,21 +1,33 @@
 import os
 import os.path
-import re
+import shutil
+import subprocess
+from pathlib import Path
 
 import requests
 
+import inst_py_pack
+from install_burp import BurpInstaller
 
-def download(url: str, filename: str = None) -> str:
+a = inst_py_pack
+
+
+def get_original_user_home() -> Path:
+    if sudo_user := os.environ.get('SUDO_USER'):
+        return Path(f'/home/{sudo_user}')
+    else:
+        return Path.home()
+
+
+def download(url: str, filename: str | Path = None) -> Path:
     if filename is None:
-        filename = os.path.basename(url)
-    if not os.path.exists(filename):
+        filename = Path(url).name
+
+    if not filename.exists():
         print(f"Downloading {url} to {filename}")
         get_response = requests.get(url)
-        with open(filename, "wb") as out_file:
-            out_file.write(get_response.content)
-            return filename
-    else:
-        print(f"File {filename} already exists")
+        filename.write_bytes(get_response.content)
+        return filename
 
 
 def message(text: str):
@@ -38,139 +50,123 @@ def myprint(text):
     return decorator
 
 
-def raw(command: str):
-    return os.system(command)
-
-
 def cmd(command: str):
-    os.system(f"bash -c 'set -euo pipefail && set -x && {command}'")
+    subprocess.run(f"{command}, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True")
 
 
-def sudo(command: str, yes: bool = True):
-    if yes:
-        cmd(f"sudo  {command} -y")
-    else:
-        cmd(f"sudo  {command}")
-
-
-def install(command: str, yes: bool = True):
-    sudo(f"apt install {command}", yes=yes)
-
-
-def run_script(script: str):
-    print(f"Running script {script}")
-    raw(f"bash {script}")
-
-
-@myprint("Removing and adding directories")
-def remove_dirs():
+# Step 1: Setting up directories
+@myprint("Settings up directories")
+def setup_directories():
+    """
+    Remove directories that are not needed and add a temp directory
+    :return:
+    """
+    home_dir = Path.home()
     for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
-        dir_path = f"/home/kali/{directory}"
-        print(f"Exist {dir_path} == {os.path.exists(dir_path)}")
-        if os.path.exists(dir_path):
-            sudo(f"rm -rf {dir_path}", yes=False)
-            print(f"Removed {dir_path}")
-    if not os.path.exists("proj"):
-        print(f"Exist proj == {os.path.exists(dir_path)}")
-        os.mkdir("proj")
+        shutil.rmtree(home_dir / directory, ignore_errors=True)
+
+    (home_dir / "proj").mkdir(exist_ok=True)
+    (home_dir / "temp").mkdir(exist_ok=True)
+    os.chdir(Path.home() / "temp")
 
 
+# Step 3: Install packages
 @myprint("Installing packages")
 def install_packages():
     for pack in ["terminator", "netcat-traditional"]:
         message(f"Installing {pack}")
-        install(pack)
+        cmd(f"apt install -y {pack}")
         print(" ")
 
 
+# Step 2: Update and upgrade packages
 @myprint("Update and Upgrade packages")
-def update_and_upgrade():
-    with open("console-setup", "w") as out_file:
-        out_file.write("""console-setup   console-setup/charmap47 select UTF-8
-console-setup   console-setup/fontface47 select Fixed
-console-setup   console-setup/fontsize-text47 select 16
-""")
-
-    myprint("Updating and Upgrading")
-
-    sudo("apt -q update")
-    os.system("bash -c 'sudo debconf-set-selections < /etc/console-setup &&sudo apt -q -y upgrade'")
+def update_and_upgrade_packages():
+    myprint("Updating")
+    subprocess.run("sudo apt -q update")
+    myprint("Updating")
+    subprocess.run("sudo apt -q -y upgrade'")
     myprint("End")
-    if os.path.exists("console-setup"):
-        os.remove("console-setup")
 
 
-
+# Step 6: Install protonvpn
 @myprint("Installing protonvpn")
 def install_proton():
     filename = download(
         "https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3_all.deb")
-    install(f"./{filename}")
-    install("proton-vpn-gnome-desktop")
-    if os.path.exists(filename):
-        os.remove(filename)
+    cmd(f"sudo apt install ./{filename.name} -y")
+    cmd("sudo apt install proton-vpn-gnome-desktop -y")
+    if filename.exists():
+        filename.unlink()
 
+
+# Step 5: Install wordlists
 @myprint("Installing wordlists")
 def install_wordlists():
-    if not os.path.exists("/usr/share/wordlists"):
-        os.mkdir("/usr/share/wordlists")
-    if not os.path.exists("/usr/share/wordlists/xsspayloads.txt"):
+    wordlist_dir = Path("/usr/share/wordlists")
+    wordlist_dir.mkdir(exist_ok=True)
+    if not (wordlist_dir / "xsspayloads.txt").exists():
         download("https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
                  "xss-payload-list.txt")
-    if not os.path.exists("/usr/share/wordlists/sql-injection-payload-list.txt"):
-        if os.path.exists("/usr/share/wordlists/sql-injection-payload-list"):
-            sudo("rm -rf /usr/share/wordlists/sql-injection-payload-list")
-        sudo(
-            "git clone https://github.com/payloadbox/sql-injection-payload-list.git /usr/share/wordlists/sql-injection-payload-list",
-            yes=False)
 
+    inject_file_path = wordlist_dir / "sql-injection-payload-list.txt"
+    if not inject_file_path.exists():
+        cmd("sudo git clone https://github.com/payloadbox/sql-injection-payload-list.git")
+        shutil.move(inject_file_path.name, (wordlist_dir / inject_file_path.name))
+
+
+# Step 7: Install xminds
 @myprint("Installing xminds")
 def install_xminds():
-    install("snapd")
-    sudo("service snapd start", yes=False)
-    sudo("apt update")
-    sudo("snap install core", yes=False)
-    sudo("snap install xmind", yes=False)
-    if os.path.exists("/home/kali/.bashrc"):
-        with open("/home/kali/.bashrc", "r") as file:
-            filedata = file.read()
+    cmd("sudo apt install snapd")
+    cmd("sudo service snapd start")
+    cmd("sudo systemctl enable snapd")
+    cmd("sudo apt update")
+    cmd("sudo snap install core")
+    cmd("sudo snap install xmind")
+    bashrc = Path("/home/kali/.bashrc")
+    if bashrc.exists():
+        data = bashrc.read_text()
+        if data.find("export PATH=$PATH:/snap/bin") <= 0:
+            data += "\nexport PATH=$PATH:/snap/bin"
+            bashrc.write_text(data)
 
-        if not filedata.find("export PATH=$PATH:/snap/bin") > 0:
-            filedata += "\nexport PATH=$PATH:/snap/bin"
-            with open("/home/kali/.bashrc", "w") as file:
-                file.write(filedata)
 
+# Step 8: Fix postgresql
 @myprint("Fixing postgresql")
 def fix_postgres():
-    if os.path.exists("/etc/postgresql/16/main/postgresql.conf"):
-        with open("/etc/postgresql/16/main/postgresql.conf", "r") as file:
-            filedata = file.read()
-        with open("/etc/postgresql/16/main/postgresql.conf", "w") as file:
-            re.sub("port = 5433", "port = 5432", filedata)
-            file.write(filedata)
-            message("Changed postgresql.conf port to 5432")
+    cfg_file = Path("/etc/postgresql/16/main/postgresql.conf")
+    if cfg_file.exists():
+        data = cfg_file.read_text()
+        data = data.replace("port = 5433", "port = 5432")
+        cfg_file.write_text(data)
+        message("Changed postgresql.conf port to 5432")
 
 
 def main():
     try:
         myprint("Starting setup script")
+        cmd("sudo export DEBIAN_FRONTEND=noninteractive")
+        cmd('sudo chsh -s "$(which zsh)"')  # Step 4
 
-        remove_dirs()
-        update_and_upgrade()
-        install_packages()
-        sudo('chsh -s "$(which zsh)"', yes=False)
+        setup_directories()  # Step 1
+        update_and_upgrade_packages()  # Step 2
+        install_packages()  # Step 3
+        install_wordlists()  # step 5
+        install_proton()  # step 6
+        install_xminds()  # step 7
+        fix_postgres()  # step 8
+        BurpInstaller().install_burp()  # step 9
 
-        install_wordlists()
-        install_proton()
-        install_xminds()
-        fix_postgres()
-        message("Cleaning up")
-        sudo("apt autoremove")
-        os.system(f"bash -c 'unset DEBIAN_FRONTEND'")
         # sudo("apt install gvm")
+    except Exception as e:
+        print(f"Exception {e}")
     finally:
-        cmd("cd ..")
+        message("Cleaning up")
+        cmd("sudo apt autoremove")
+        cmd("sudo unset DEBIAN_FRONTEND")
+        cmd("/home/kali")
 
 
 if __name__ == '__main__':
-    main()
+    install_burp()
