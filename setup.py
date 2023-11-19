@@ -33,8 +33,8 @@ def download(url: str, filename: str | Path = None) -> Path:
 
 
 def message(text: str):
-    log.debug(" ")
-    log.debug(f"{text:#^50}")
+    print(" ")
+    log.info(f"{text:#^50}")
 
 
 def myprint(text):
