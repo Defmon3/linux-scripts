@@ -143,7 +143,7 @@ def install_xminds():
 @myprint("Fixing postgresql")
 def fix_postgres():
     if os.path.exists("/etc/postgresql/16/main/postgresql.conf"):
-        with open("/etc/postgresql/16/main/postgresql.conf", "rw") as file:
+        with open("/etc/postgresql/16/main/postgresql.conf", "r") as file:
             filedata = file.read()
         with open("/etc/postgresql/16/main/postgresql.conf", "w") as file:
             re.sub("port = 5433", "port = 5432", filedata)
