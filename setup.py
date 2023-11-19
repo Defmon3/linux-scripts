@@ -121,14 +121,12 @@ def install_proton():
 def install_wordlists():
     cmd("sudo apt install wordlists -y")
     wordlist_dir = Path("/usr/share/wordlists")
-    wordlist_dir.mkdir(exist_ok=True)
-    print(1)
     if not Path(wordlist_dir / "xsspayloads.txt").exists():
         filename = download(
             "https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
             "xss-payload-list.txt")
 
-        shutil.move((wordlist_dir / filename.name), wordlist_dir)
+        shutil.move(filename.name, (wordlist_dir / filename.name))
         cmd(f"sudo chmod 777 {filename.resolve()}")
     inject_file_path = Path(wordlist_dir / "sql-injection-payload-list.txt")
     if not inject_file_path.exists():
