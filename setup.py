@@ -89,6 +89,7 @@ def install_packages():
         message(f"Installing {pack}")
         cmd(f"apt install -y {pack}")
         print(" ")
+    user_cmd("mkdir -p /home/kali/.config/terminator")
     shutil.move("terminator_config", "/home/kali/.config/terminator/config")
 
 
@@ -179,7 +180,7 @@ def main():
         print(f"Exception {e}")
     finally:
         message("Cleaning up")
-        cmd("sudo apt autoremove")
+        cmd("sudo apt autoremove -y")
         cmd("/home/kali")
 
 
