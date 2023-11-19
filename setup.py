@@ -73,13 +73,11 @@ def setup_directories():
     home_dir = Path("/home/kali")
     for directory in ["Documents", "Music", "Pictures", "Public", "Templates", "Videos", "linux-scripts"]:
         shutil.rmtree(home_dir / directory, ignore_errors=True)
-
+        print(f"Removed directories {directory}")
     user_cmd("mkdir -p /home/kali/proj")
-    
+    print("Created directory /home/kali/proj")
     (home_dir / "temp").mkdir(exist_ok=True)
-
-
-
+    print("Created directory /home/kali/temp")
     os.chdir(home_dir / "temp")
 
 
@@ -98,7 +96,7 @@ def update_and_upgrade_packages():
     myprint("Updating")
     cmd("sudo apt update -q ")
     myprint("Updating")
-    cmd("sudo apt upgrade -y ", grep=" -vE '(Installing|Setting up|Preparing|Unpacking|Reading database)'")
+    cmd("sudo apt upgrade -y ", grep=" -vE '(Installing|Setting up|Preparing|Unpacking|Reading database|Get:)'")
     myprint("End")
 
 
