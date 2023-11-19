@@ -92,7 +92,7 @@ def update_and_upgrade_packages():
     myprint("Updating")
     cmd("sudo apt update -q ")
     myprint("Updating")
-    cmd("sudo apt -q -y upgrade'")
+    cmd("sudo apt upgrade -q -y ")
     myprint("End")
 
 
