@@ -89,6 +89,7 @@ def install_packages():
         message(f"Installing {pack}")
         cmd(f"apt install -y {pack}")
         print(" ")
+    shutil.move("terminator_config", "/home/kali/.config/terminator/config")
 
 
 # Step 2: Update and upgrade packages
