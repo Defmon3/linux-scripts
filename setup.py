@@ -120,7 +120,7 @@ def install_wordlists():
                  "xss-payload-list.txt")
     if not os.path.exists("/usr/share/wordlists/sql-injection-payload-list.txt"):
         if os.path.exists("/usr/share/wordlists/sql-injection-payload-list"):
-            os.rmdir("/usr/share/wordlists/sql-injection-payload-list")
+            sudo("rm -rf /usr/share/wordlists/sql-injection-payload-list")
         sudo(
             "git clone https://github.com/payloadbox/sql-injection-payload-list.git /usr/share/wordlists/sql-injection-payload-list",
             yes=False)
