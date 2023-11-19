@@ -118,8 +118,8 @@ def install_proton():
 @myprint("Installing wordlists")
 def install_wordlists():
     wordlist_dir = Path("/usr/share/wordlists")
-    # wordlist_dir.mkdir(exist_ok=True)
-    user_cmd(f"mkdir -p {wordlist_dir}")
+    wordlist_dir.mkdir(exist_ok=True)
+
     if not (wordlist_dir / "xsspayloads.txt").exists():
         filename = download(
             "https://raw.githubusercontent.com/payloadbox/xss-payload-list/master/Intruder/xss-payload-list.txt",
